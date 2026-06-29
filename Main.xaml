@@ -25,7 +25,6 @@
       <x:String>System.Windows.Markup</x:String>
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
-      <x:String>UiPath.Platform.ResourceHandling</x:String>
       <x:String>System.Runtime.Serialization</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
@@ -55,27 +54,50 @@
       <AssemblyReference>UiPath.System.Activities</AssemblyReference>
       <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
-      <AssemblyReference>UiPath.Platform</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
       <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Main Sequence" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="x:String" Name="generatedPassword" />
+      <Variable x:TypeArguments="x:Int32" Name="length" />
+      <Variable x:TypeArguments="x:Boolean" Name="usePassphrase" />
+      <Variable x:TypeArguments="x:String" Name="password" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:InvokePowerShell x:TypeArguments="x:String" ContinueOnError="{x:Null}" CommandText="python Python\password_generator.py --length 16 --output-file Outputs\last_generated.txt --silent" DisplayName="Run Python Password Generator" sap2010:WorkflowViewState.IdRef="InvokePowerShell_1" IsScript="True">
-      <ui:InvokePowerShell.PowerShellVariables>
-        <scg:Dictionary x:TypeArguments="x:String, Argument" />
-      </ui:InvokePowerShell.PowerShellVariables>
-    </ui:InvokePowerShell>
-    <ui:ReadTextFile File="{x:Null}" Content="[generatedPassword]" DisplayName="Read Generated Password File" FileName="Outputs\last_generated.txt" sap2010:WorkflowViewState.IdRef="ReadTextFile_1" />
-    <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:00" DisplayName="Display Password Message Box" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="[&quot;Your secure password has been generated!&quot; + vbCrLf + vbCrLf + &quot;Password: &quot; + generatedPassword + vbCrLf + vbCrLf + &quot;It has been saved to Outputs\last_generated.txt.&quot;]" />
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke GetUserInput workflow" UnSafe="False" WorkflowFileName="Workflows\GetUserInput.xaml" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1">
+      <ui:InvokeWorkflowFile.Arguments>
+        <OutArgument x:TypeArguments="x:Int32" x:Key="out_Length">[length]</OutArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="out_UsePassphrase">[usePassphrase]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke GeneratePassword workflow" UnSafe="False" WorkflowFileName="Workflows\GeneratePassword.xaml" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:Int32" x:Key="in_Length">[length]</InArgument>
+        <InArgument x:TypeArguments="x:Boolean" x:Key="in_UsePassphrase">[usePassphrase]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_GeneratedPassword">[password]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke SavePassword workflow" UnSafe="False" WorkflowFileName="Workflows\SavePassword.xaml" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_Password">[password]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke DisplayPassword workflow" UnSafe="False" WorkflowFileName="Workflows\DisplayPassword.xaml" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_Password">[password]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
   </Sequence>
 </Activity>
