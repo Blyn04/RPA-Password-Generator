@@ -63,17 +63,22 @@
       <AssemblyReference>UiPath.Workflow</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="GetUserInput" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="GetUserInput" sap:VirtualizedContainerService.HintSize="1288,1032" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="selectedMode" />
       <Variable x:TypeArguments="x:String" Name="inputText" />
     </Sequence.Variables>
-    <ui:InputDialog OptionsString="Random Characters;Memorable Passphrase" DisplayName="Input Dialog - Mode" IsPassword="False" Label="Select Password Generation Mode:" Title="Generation Mode" sap2010:WorkflowViewState.IdRef="InputDialog_1">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:InputDialog Options="{x:Null}" DisplayName="Input Dialog - Mode" sap:VirtualizedContainerService.HintSize="452,329" sap2010:WorkflowViewState.IdRef="InputDialog_1" IsPassword="False" Label="Select Password Generation Mode:" OptionsString="Random Characters;Memorable Passphrase" Title="Generation Mode" TopMost="False">
       <ui:InputDialog.Result>
         <OutArgument x:TypeArguments="x:String">[selectedMode]</OutArgument>
       </ui:InputDialog.Result>
     </ui:InputDialog>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+    <Assign sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="x:Boolean">[out_UsePassphrase]</OutArgument>
       </Assign.To>
@@ -81,10 +86,15 @@
         <InArgument x:TypeArguments="x:Boolean">[selectedMode = "Memorable Passphrase"]</InArgument>
       </Assign.Value>
     </Assign>
-    <If Condition="[out_UsePassphrase]" sap2010:WorkflowViewState.IdRef="If_1">
+    <If Condition="[out_UsePassphrase]" sap:VirtualizedContainerService.HintSize="452,505" sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-          <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Input Dialog - Words Count" IsPassword="False" Label="Enter the number of words (default 4):" Title="Passphrase Words Count" sap2010:WorkflowViewState.IdRef="InputDialog_2">
+        <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="450,355" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Input Dialog - Words Count" sap:VirtualizedContainerService.HintSize="416,275" sap2010:WorkflowViewState.IdRef="InputDialog_2" IsPassword="False" Label="Enter the number of words (default 4):" Title="Passphrase Words Count" TopMost="False">
             <ui:InputDialog.Result>
               <OutArgument x:TypeArguments="x:String">[inputText]</OutArgument>
             </ui:InputDialog.Result>
@@ -100,8 +110,8 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-          <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Input Dialog - Password Length" IsPassword="False" Label="Enter the length of the password (default 16):" Title="Password Length" sap2010:WorkflowViewState.IdRef="InputDialog_3">
+        <Sequence DisplayName="Else" sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Input Dialog - Password Length" sap2010:WorkflowViewState.IdRef="InputDialog_3" IsPassword="False" Label="Enter the length of the password (default 16):" Title="Password Length" TopMost="False">
             <ui:InputDialog.Result>
               <OutArgument x:TypeArguments="x:String">[inputText]</OutArgument>
             </ui:InputDialog.Result>
